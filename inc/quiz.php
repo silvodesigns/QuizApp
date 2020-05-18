@@ -1,18 +1,21 @@
 <?php
 // Start the session
+session_start();
 
 // Include questions from the questions.php file
-
+include('questions.php');
 // Make a variable to hold the total number of questions to ask
-
+$total_questions;
 // Make a variable to hold the toast message and set it to an empty string
-
+$toast_message = '';
 // Make a variable to determine if the score will be shown or not. Set it to false.
-
+$show_score = false;
 // Make a variable to hold a random index. Assign null to it.
-
+$random_index = null;
 // Make a variable to hold the current question. Assign null to it.
-
+$current_question = null;
+//Holds total number of correct answers
+$correct_answers = 0;
 
 /*
     If the server request was of type POST
@@ -23,6 +26,17 @@
         Otherwise:
             1. Assign a bummer message to the toast variable.
 */
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if($_POST['answer'] === $questions[0]['correctAnswer']){
+        $toast_message = "Way to go, that is correct!";
+        $correct_answers = $correct_answers + 1;
+    } else {
+        $toast_message = "Sorry, that not the right answer...";
+    }
+}
+
+
 
 /*
     Check if a session variable has ever been set/created to hold the indexes of questions already asked.

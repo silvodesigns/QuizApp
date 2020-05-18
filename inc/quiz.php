@@ -24,7 +24,8 @@ $question = $questions[$index];
 $answers =  [];
 $answers[] = $question['correctAnswer'];
 $answers[] = $question['firstIncorrectAnswer'];
-$answers[] = $question['correctAnswer'];
+$answers[] = $question['secondIncorrectAnswer'];
+shuffle($answers);
 
 
 /*

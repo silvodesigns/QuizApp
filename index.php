@@ -1,3 +1,9 @@
+<?php
+include('inc/quiz.php');
+// var_dump($question);
+var_dump($answers);
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,9 +17,9 @@
     <div class="container">
         <div id="quiz-box">
             <p class="breadcrumbs">Question # of #</p>
-            <p class="quiz">What is 54 + 71?</p>
-            <form action="index.html" method="post">
-                <input type="hidden" name="id" value="0" />
+            <p class="quiz"><?php echo "What is " . $question["leftAdder"] . "+" . $question["rightAdder"] .  "?"   ?></p>
+            <form action="index.php" method="post">
+                <input type="hidden" name="index" value="<?php echo $index; ?>" />
                 <input type="submit" class="btn" name="answer" value="135" />
                 <input type="submit" class="btn" name="answer" value="125" />
                 <input type="submit" class="btn" name="answer" value="115" />

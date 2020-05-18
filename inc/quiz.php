@@ -16,6 +16,16 @@ $random_index = null;
 $current_question = null;
 //Holds total number of correct answers
 $correct_answers = 0;
+//index
+$index = 2;
+//question
+$question = $questions[$index];
+//answers
+$answers =  [];
+$answers[] = $question['correctAnswer'];
+$answers[] = $question['firstIncorrectAnswer'];
+$answers[] = $question['correctAnswer'];
+
 
 /*
     If the server request was of type POST
@@ -37,21 +47,36 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 }
 
 
-
 /*
     Check if a session variable has ever been set/created to hold the indexes of questions already asked.
     If it has NOT: 
         1. Create a session variable to hold used indexes and initialize it to an empty array.
         2. Set the show score variable to false.
 */
+if(!$_SESSION['page']){
+    $_SESSION['page'] = [];
+    $show_score = false;
 
+}
 
 /*
   If the number of used indexes in our session variable is equal to the total number of questions
   to be asked:
         1.  Reset the session variable for used indexes to an empty array 
-        2.  Set the show score variable to true.
+        2.  Set the show score variable to true.*/
+if(count($_SESSION['page']) == count($questions)){
+        $_SESSION['page'] = [];
+        $show_score = true;
+} else {
+    $show_score = false;
+    if($_SESSION['page'] == 1){
+        $correct_answers = 0;
+        $toast_message = '';
+        $random_index = rand(0, 9);
+    }
 
+}
+/*
   Else:
     1. Set the show score variable to false 
     2. If it's the first question of the round:

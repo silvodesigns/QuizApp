@@ -10,22 +10,13 @@ $total_questions = count($questions);
 $toast_message = '';
 // Make a variable to determine if the score will be shown or not. Set it to false.
 $show_score = false;
-// Make a variable to hold a random index. Assign null to it.
-$random_index = null;
 // Make a variable to hold the current question. Assign null to it.
 $current_question = null;
 //Holds total number of correct answers
 $correct_answers = 0;
-//index
-$index = array_rand($questions);
-//question
-$question = $questions[$index];
-//answers
-$answers =  [];
-$answers[] = $question['correctAnswer'];
-$answers[] = $question['firstIncorrectAnswer'];
-$answers[] = $question['secondIncorrectAnswer'];
-shuffle($answers);
+
+
+
 
 
 /*
@@ -41,7 +32,7 @@ shuffle($answers);
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     if($_POST['answer'] == $questions[$_POST["index"]]['correctAnswer']){
         $toast_message = "Way to go, that is correct!";
-        $correct_answers = $correct_answers + 1;
+        $_SESSION['totalCorrect'] = $_SESSION['totalCorrect'] + 1;
     } else {
         $toast_message = "Sorry, that not the right answer...";
     }
@@ -54,8 +45,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         1. Create a session variable to hold used indexes and initialize it to an empty array.
         2. Set the show score variable to false.
 */
-if(!$_SESSION['page']){
-    $_SESSION['page'] = [];
+if(!isset($_SESSION['used_indexes'])){
+    $_SESSION['used_indexes'] = [];
+    $_SESSION['totalCorrect'] = 0;
     $show_score = false;
 
 }
@@ -65,16 +57,30 @@ if(!$_SESSION['page']){
   to be asked:
         1.  Reset the session variable for used indexes to an empty array 
         2.  Set the show score variable to true.*/
-if(count($_SESSION['page']) == count($questions)){
-        $_SESSION['page'] = [];
+if(count($_SESSION['used_indexes']) == $total_questions){
+        $_SESSION['used_indexes'] = [];
         $show_score = true;
 } else {
     $show_score = false;
-    if($_SESSION['page'] == 1){
-        $correct_answers = 0;
-        $toast_message = '';
-        $random_index = rand(0, 9);
+    if(count($_SESSION['used_indexes']) == 0){
+        $_SESSION['totalCorrect'] = 0;
+        $toast_message = '';  
     }
+    
+    //index
+    do{
+    $index = array_rand($questions);
+    } while(in_array($index,$_SESSION['used_indexes']));
+    //question
+    $question = $questions[$index];
+    array_push($_SESSION['used_indexes'], $index); 
+    //answers
+    $answers =  [];
+    $answers[] = $question['correctAnswer'];
+    $answers[] = $question['firstIncorrectAnswer'];
+    $answers[] = $question['secondIncorrectAnswer'];
+    shuffle($answers);  
+
 
 }
 /*
@@ -93,3 +99,5 @@ if(count($_SESSION['page']) == count($questions)){
             firstIncorrectAnswer, and secondIncorrect answer from the variable in step e.
         h. Shuffle the array from step g.
 */
+
+// session_destroy();

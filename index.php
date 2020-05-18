@@ -1,8 +1,11 @@
 <?php
 include('inc/quiz.php');
 // var_dump($question)
-var_dump($_POST["answer"]);
-var_dump($_POST["index"]);
+// var_dump($_POST["answer"]);
+// var_dump($_POST["index"]);
+echo implode('</br>',$_SESSION['used_indexes']);
+// var_dump($_SESSION['totalCorrect']);
+// var_dump($index);
 
 ?>
 <!DOCTYPE html>
@@ -18,14 +21,22 @@ var_dump($_POST["index"]);
     <div class="container">
         <div id="quiz-box">
             <?php if(!empty($toast_message)) { echo $toast_message;}?>
-            <p class="breadcrumbs"><?php echo "Question " . 1 . " of " . $total_questions; ?></p>
-            <p class="quiz"><?php echo "What is " . $question["leftAdder"] . "+" . $question["rightAdder"] .  "?"   ?></p>
-            <form action="index.php" method="post">
-                <input type="hidden" name="index" value="<?php echo $index; ?>" />
-                <input type="submit" class="btn" name="answer" value="<?php echo $answers[0]; ?>" />
-                <input type="submit" class="btn" name="answer" value="<?php echo $answers[1]; ?>" />
-                <input type="submit" class="btn" name="answer" value="<?php echo $answers[2]; ?>" />
-            </form>
+            <?php if($show_score == false) {
+            echo '<p class="breadcrumbs">' .
+                  "Question " . count($_SESSION['used_indexes']) .
+                 " of " . $total_questions; "</p>";
+            echo '<p class="quiz"> What is ' . $question["leftAdder"] . 
+                  '+' . $question["rightAdder"] .  '?</p>';
+            echo '<form action="index.php" method="post">';
+            echo '<input type="hidden" name="index" value="'. $index .'" />';
+            echo '<input type="submit" class="btn" name="answer" value="' . $answers[0] . '" />';
+            echo '<input type="submit" class="btn" name="answer" value="' . $answers[1] . '" />';
+            echo '<input type="submit" class="btn" name="answer" value="' . $answers[2] . '" />';
+            echo '</form>';
+            }?>
+            <?php if($show_score == true){
+            echo "<p>You got " .$_SESSION['totalCorrect'] . " out of " . $total_questions . " correct!" . "</p>";
+            }       ?>
         </div>
     </div>
 </body>

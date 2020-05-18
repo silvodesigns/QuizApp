@@ -3,7 +3,8 @@ include('inc/quiz.php');
 // var_dump($question)
 // var_dump($_POST["answer"]);
 // var_dump($_POST["index"]);
-echo implode('</br>',$_SESSION['used_indexes']);
+// echo implode('</br>',$_SESSION);
+// var_dump($_SESSION);
 // var_dump($_SESSION['totalCorrect']);
 // var_dump($index);
 

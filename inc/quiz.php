@@ -5,7 +5,7 @@ session_start();
 // Include questions from the questions.php file
 include('questions.php');
 // Make a variable to hold the total number of questions to ask
-$total_questions;
+$total_questions = count($questions);
 // Make a variable to hold the toast message and set it to an empty string
 $toast_message = '';
 // Make a variable to determine if the score will be shown or not. Set it to false.
@@ -17,7 +17,7 @@ $current_question = null;
 //Holds total number of correct answers
 $correct_answers = 0;
 //index
-$index = 2;
+$index = array_rand($questions);
 //question
 $question = $questions[$index];
 //answers
@@ -39,7 +39,7 @@ shuffle($answers);
 */
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    if($_POST['answer'] === $questions[0]['correctAnswer']){
+    if($_POST['answer'] == $questions[$_POST["index"]]['correctAnswer']){
         $toast_message = "Way to go, that is correct!";
         $correct_answers = $correct_answers + 1;
     } else {

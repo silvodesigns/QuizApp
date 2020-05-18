@@ -1,7 +1,8 @@
 <?php
 include('inc/quiz.php');
-// var_dump($question);
-var_dump($answers);
+// var_dump($question)
+var_dump($_POST["answer"]);
+var_dump($_POST["index"]);
 
 ?>
 <!DOCTYPE html>
@@ -16,7 +17,8 @@ var_dump($answers);
 <body>
     <div class="container">
         <div id="quiz-box">
-            <p class="breadcrumbs">Question # of #</p>
+            <?php if(!empty($toast_message)) { echo $toast_message;}?>
+            <p class="breadcrumbs"><?php echo "Question " . 1 . " of " . $total_questions; ?></p>
             <p class="quiz"><?php echo "What is " . $question["leftAdder"] . "+" . $question["rightAdder"] .  "?"   ?></p>
             <form action="index.php" method="post">
                 <input type="hidden" name="index" value="<?php echo $index; ?>" />

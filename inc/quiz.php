@@ -1,17 +1,22 @@
 <?php
 // Start the session
+session_start();
 
 // Include questions from the questions.php file
-
+include('questions.php');
 // Make a variable to hold the total number of questions to ask
-
+$total_questions = count($questions);
 // Make a variable to hold the toast message and set it to an empty string
-
+$toast_message = '';
 // Make a variable to determine if the score will be shown or not. Set it to false.
-
-// Make a variable to hold a random index. Assign null to it.
-
+$show_score = false;
 // Make a variable to hold the current question. Assign null to it.
+$current_question = null;
+//Holds total number of correct answers
+$correct_answers = 0;
+
+
+
 
 
 /*
@@ -24,20 +29,61 @@
             1. Assign a bummer message to the toast variable.
 */
 
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if($_POST['answer'] == $questions[$_POST["index"]]['correctAnswer']){
+        $toast_message = "Way to go, that is correct!";
+        $_SESSION['totalCorrect'] = $_SESSION['totalCorrect'] + 1;
+    } else {
+        $toast_message = "Sorry, that not the right answer...";
+    }
+}
+
+
 /*
     Check if a session variable has ever been set/created to hold the indexes of questions already asked.
     If it has NOT: 
         1. Create a session variable to hold used indexes and initialize it to an empty array.
         2. Set the show score variable to false.
 */
+if(!isset($_SESSION['used_indexes'])){
+    $_SESSION['used_indexes'] = [];
+    $_SESSION['totalCorrect'] = 0;
+    $show_score = false;
 
+}
 
 /*
   If the number of used indexes in our session variable is equal to the total number of questions
   to be asked:
         1.  Reset the session variable for used indexes to an empty array 
-        2.  Set the show score variable to true.
+        2.  Set the show score variable to true.*/
+if(count($_SESSION['used_indexes']) == $total_questions){
+        $_SESSION['used_indexes'] = [];
+        $show_score = true;
+} else {
+    $show_score = false;
+    if(count($_SESSION['used_indexes']) == 0){
+        $_SESSION['totalCorrect'] = 0;
+        $toast_message = '';  
+    }
+    
+    //index
+    do{
+    $index = array_rand($questions);
+    } while(in_array($index,$_SESSION['used_indexes']));
+    //question
+    $question = $questions[$index];
+    array_push($_SESSION['used_indexes'], $index); 
+    //answers
+    $answers =  [];
+    $answers[] = $question['correctAnswer'];
+    $answers[] = $question['firstIncorrectAnswer'];
+    $answers[] = $question['secondIncorrectAnswer'];
+    shuffle($answers);  
 
+
+}
+/*
   Else:
     1. Set the show score variable to false 
     2. If it's the first question of the round:
@@ -53,3 +99,5 @@
             firstIncorrectAnswer, and secondIncorrect answer from the variable in step e.
         h. Shuffle the array from step g.
 */
+
+// session_destroy();
